@@ -6,11 +6,11 @@ class WeatherSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Weather
-        fields = {
+        fields = (
             "created",
             "longitude",
             "latitude",
             "temperature",
             "humidity",
             "pressure",
-        }
+        )

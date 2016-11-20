@@ -13,3 +13,16 @@ class Weather(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+class PublicWeather(Weather):
+    def __init__(self):
+        super().__init__()
+
+class PrivateWeather(Weather):
+    """
+    Private weather info for a Vest user.
+    """
+    owner = models.ForeignKey('users.VestUser', related_name='weather', on_delete=models.CASCADE)
+
+    def __init__(self):
+        super().__init__()
