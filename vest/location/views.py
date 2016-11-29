@@ -1,11 +1,11 @@
-from rest_framework import generics
+from rest_framework import viewsets
 from rest_framework import permissions
 
 from location.models import UserLocation
 from location.serializers import LocationSerializer
-from location.permissions import IsOwner
+from users.permissions import IsOwner
 
-class LocationList(generics.ListCreateAPIView):
+class LocationList(viewsets.ModelViewSet):
     """
     List all code snippets, or create a new snippet.
     """
@@ -16,10 +16,5 @@ class LocationList(generics.ListCreateAPIView):
             IsOwner,
     )
 
-class LocationDetail(generics.RetrieveAPIView):
-    queryset = UserLocation.objects.all()
-    serializer_class = LocationSerializer
-    permission_classes = (
-            permissions.IsAuthenticated,
-            IsOwner,
-    )
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)

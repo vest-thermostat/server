@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
-class VestUser(User):
+class VestUser(AbstractUser):
     """
     """
-    def __init__(self):
-        super().__init__()
+    pass
+

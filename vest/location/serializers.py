@@ -8,7 +8,6 @@ class LocationSerializer(serializers.ModelSerializer):
         model = UserLocation
         fields = (
             "created",
-            "owner",
             "latitude",
             "longitude",
         )
