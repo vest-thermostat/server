@@ -17,4 +17,7 @@ class LocationList(viewsets.ModelViewSet):
     )
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        if self.request.user.balance < serializer.price:
+            raise serializers.ValidationError("Pas assez d'argent dans la balance")
+        else:
+            serializer.save(owner=self.request.user)
