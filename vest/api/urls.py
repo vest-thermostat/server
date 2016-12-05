@@ -5,9 +5,9 @@ from weather.views import WeatherList, PrivateWeatherList
 from location.views import LocationList
 
 router = routers.DefaultRouter()
-router.register(r'weather/own', PrivateWeatherList)
-router.register(r'weather/public', WeatherList)
-router.register(r'location', LocationList)
+router.register(r'weather/own', PrivateWeatherList, 'weather_own')
+router.register(r'weather/public', WeatherList, 'weather_public')
+router.register(r'location', LocationList, 'location')
 
 urlpatterns = [
     url(r'^', include(router.urls)),

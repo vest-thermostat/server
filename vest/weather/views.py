@@ -1,6 +1,7 @@
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.renderers import TemplateHTMLRenderer
 
 from weather.models import Weather, PrivateWeather
 from weather.serializers import WeatherSerializer
@@ -25,6 +26,9 @@ class PrivateWeatherList(WeatherList):
             permissions.IsAuthenticated,
             IsOwner,
     )
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'weather_overview.html'
+    # template_name = 'base.html'
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

@@ -1,2 +1,4 @@
 django
 djangorestframework
+django-bootstrap3
+django-sekizai
