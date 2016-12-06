@@ -28,7 +28,6 @@ class PrivateWeatherList(WeatherList):
     )
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'weather_overview.html'
-    # template_name = 'base.html'
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
