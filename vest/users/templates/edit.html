@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}
+    {{ block.super }}
+    Edit
+{% endblock %}
+
+{% block head %}
+    {{ form.media }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <form action="{% url "edit" %}" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" value="Update" class="btn btn-primary">
+                Submit
+            </button>
+        {% endbuttons %}
+    </form>
+</div>
+
+{% endblock %}
