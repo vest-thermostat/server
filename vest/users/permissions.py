@@ -7,9 +7,10 @@ class IsOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return obj.owner == request.user
-        # if request.method in permissions.SAFE_METHODS:
-        #     # Read permissions are allowed for owner.
-        #     return obj.owner == request.user
-        # else:
-        #     # No Write permissions
-        #     return False
+
+
+class IsSelf(permissions.BasePermission):
+    """
+    """
+    def has_object_permission(self, request, view, obj):
+        return obj.username == request.user.username

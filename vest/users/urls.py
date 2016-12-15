@@ -12,6 +12,6 @@ urlpatterns = [
         {'template_name': 'logout.html'},
         name='logout'
     ),
-    url(r'^profile/$', UserProfileView.as_view(), name='profile'),
+    # url(r'^profile/$', UserProfileView.as_view(), name='profile'),
     url(r'^edit/$', UserEditView.as_view(), name='edit'),
 ]
