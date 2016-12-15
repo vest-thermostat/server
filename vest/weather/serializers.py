@@ -8,9 +8,19 @@ class WeatherSerializer(serializers.ModelSerializer):
         model = Weather
         fields = (
             "created",
-            "longitude",
-            "latitude",
             "temperature",
             "humidity",
-            "pressure",
         )
+
+class PrivateWeatherSerializer(serializers.ModelSerializer):
+    """
+    """
+    class Meta:
+        model = PrivateWeather
+        fields = (
+            "created",
+            "temperature",
+            "humidity",
+            "owner",
+        )
+        read_only_fields = ("owner",)

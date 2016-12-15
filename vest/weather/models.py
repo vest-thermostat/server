@@ -9,13 +9,15 @@ class Weather(models.Model):
     latitude = models.FloatField()
     temperature = models.FloatField()
     humidity = models.FloatField()
-    pressure = models.FloatField()
 
     class Meta:
         ordering = ('created',)
 
-class PrivateWeather(Weather):
+class PrivateWeather(models.Model):
     """
     Private weather info for a Vest user.
     """
+    created = models.DateTimeField(auto_now_add=True)
+    temperature = models.FloatField()
+    humidity = models.FloatField()
     owner = models.ForeignKey('users.VestUser', related_name='weather', on_delete=models.CASCADE)
