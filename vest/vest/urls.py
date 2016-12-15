@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib.gis import admin
 from rest_framework import routers
+from rest_framework.authtoken import views
 
 from weather.views import WeatherList, PrivateWeatherList
 from location.views import LocationList
@@ -28,7 +29,7 @@ router.register(r'location', LocationList, base_name='location')
 router.register(r'users', UserProfileView, base_name='users')
 
 urlpatterns = [
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-auth/', views.obtain_auth_token),
     url(r'^admin/', admin.site.urls),
     url(r'users/', include('users.urls')),
     url(r'^', include(router.urls)),
