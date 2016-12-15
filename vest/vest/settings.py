@@ -95,7 +95,7 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'geodb',
-        'USER': 'thomas',
+        'USER': 'admin',
     }
 }
 
