@@ -93,3 +93,8 @@ env/
 # Database
 *.sqlite3
 *.db
+
+# JS
+vest/node_modules/*
+vest/assets/bundles/*
+vest/webpack-stats.json
