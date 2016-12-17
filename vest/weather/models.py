@@ -11,7 +11,8 @@ class Weather(models.Model):
     humidity = models.FloatField()
 
     class Meta:
-        ordering = ('created',)
+        ordering = ('-created',)
+
 
 class PrivateWeather(models.Model):
     """
@@ -21,3 +22,6 @@ class PrivateWeather(models.Model):
     temperature = models.FloatField()
     humidity = models.FloatField()
     owner = models.ForeignKey('users.VestUser', related_name='weather', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('-created',)

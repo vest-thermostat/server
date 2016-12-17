@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '172.23.218.116',
+    '192.168.0.208',
     '127.0.0.1',
     'localhost',
 ]
@@ -148,6 +149,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'vest', 'static')
 LOGIN_REDIRECT_URL = '/'
 
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',

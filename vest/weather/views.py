@@ -27,8 +27,8 @@ class PrivateWeatherList(viewsets.ModelViewSet):
             permissions.IsAuthenticated,
             IsOwner,
     )
-    # renderer_classes = [TemplateHTMLRenderer]
-    # template_name = 'weather_overview.html'
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'weather_overview.html'
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
