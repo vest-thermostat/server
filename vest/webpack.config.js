@@ -1,6 +1,7 @@
 var path = require("path");
 var webpack = require('webpack');
 var BundleTracker = require('webpack-bundle-tracker');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   context: __dirname,
@@ -18,6 +19,9 @@ module.exports = {
 
   plugins: [
     new BundleTracker({filename: './webpack-stats.json'}),
+    new ExtractTextPlugin('public/style.css', {
+      allChunks: true
+    }),
   ],
 
   module: {
@@ -27,11 +31,11 @@ module.exports = {
         exclude: /node_modules/, 
         loader: 'babel-loader',
         query: {
-          presets:['react'],
+          presets:['es2015', 'react'],
         },
       }, {
         test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
+        loaders: ['style', 'css', 'sass', ExtractTextPlugin.extract('css!sass')]
       },
     ],
   },

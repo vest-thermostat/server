@@ -7,6 +7,8 @@
 {% endblock %}
 
 {% block content %}
+
+<div class="container" style="align-content: center;">
     <div id="react-weather-graph"></div>
 
     <script>
@@ -23,4 +25,6 @@
         });
     </script>
     {% render_bundle 'weather_graph' %}
+<div>
+
 {% endblock %}

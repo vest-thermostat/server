@@ -7,6 +7,9 @@ const LineChart = require("react-timeseries-charts").LineChart;
 const TimeSeries = require("pondjs").TimeSeries;
 const TimeRange = require("pondjs").TimeRange;
 const styler = require("react-timeseries-charts").styler;
+const Gauge = require("react-svg-gauge");
+
+// require("./WeatherGraph.scss");
 
 class WeatherGraph extends React.Component {
     constructor(props) {
@@ -35,6 +38,10 @@ class WeatherGraph extends React.Component {
         this.state.finish = this.state.times[sorted.length - 1];
     }
 
+    _getLast(key) {
+        return this.state.datas[this.state.datas.length - 1][key];
+    }
+
     render () {
         const style = styler([
             {key: "temp", color: "orange"},
@@ -43,40 +50,61 @@ class WeatherGraph extends React.Component {
 
         const timeRange = new TimeRange(this.state.begin, this.state.finish);
         return (
-            <ChartContainer timeRange={timeRange}>
-                <ChartRow height="150">
-                    <YAxis 
-                        id="temp"
-                        label="Temperature (°C)" 
-                        style={style.axisStyle("temp")}
-                        labelOffset={-5} 
-                        min={-5} max={40} type="linear"
-                        format=",.1f"
-                    />
-                    <Charts>
-                        <LineChart
-                            axis="temp"
-                            style={style}
-                            series={this.state.temperatures}
-                            columns={["temp"]}
+            <div>
+                <ChartContainer timeRange={timeRange}>
+                    <ChartRow height="150">
+                        <YAxis 
+                            id="temp"
+                            label="Temperature (°C)" 
+                            style={style.axisStyle("temp")}
+                            labelOffset={-5} 
+                            min={-5} max={40} type="linear"
+                            format=",.1f"
                         />
-                        <LineChart
-                            axis="humidity"
-                            style={style}
-                            series={this.state.humidities}
-                            columns={["humidity"]}
+                        <Charts>
+                            <LineChart
+                                axis="temp"
+                                style={style}
+                                series={this.state.temperatures}
+                                columns={["temp"]}
+                            />
+                            <LineChart
+                                axis="humidity"
+                                style={style}
+                                series={this.state.humidities}
+                                columns={["humidity"]}
+                            />
+                        </Charts>
+                        <YAxis 
+                            id="humidity" 
+                            label="Humidity (%)" 
+                            style={style.axisStyle("humidity")}
+                            labelOffset={5} 
+                            min={0} max={100} 
+                            type="linear" 
+                            format=",.1f"/>
+                    </ChartRow>
+                </ChartContainer>
+                <div className="row">
+                    <div className="col-md-6">
+                        <Gauge className="gauge"
+                            value={this._getLast("temperature")} 
+                            min={-10} max={70} 
+                            width={220} height={200} 
+                            color="orange" label="Temperature"
+                            valueLabelStyle={{textAnchor: "middle", fontSize: '22px', opacity: 0.5}}
                         />
-                    </Charts>
-                    <YAxis 
-                        id="humidity" 
-                        label="Humidity (%)" 
-                        style={style.axisStyle("humidity")}
-                        labelOffset={5} 
-                        min={0} max={100} 
-                        type="linear" 
-                        format=",.1f"/>
-                </ChartRow>
-            </ChartContainer>
+                    </div>
+                    <div className="col-md-6">
+                        <Gauge className="gauge"
+                            value={this._getLast("humidity")} 
+                            width={220} height={200} 
+                            color="blue" label="Humidity" 
+                            valueLabelStyle={{textAnchor: "middle", fontSize: '44px', opacity: 0.5}}
+                        />
+                    </div>
+                </div>
+            </div>
         );
     }
 }
