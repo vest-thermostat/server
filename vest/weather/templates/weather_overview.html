@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load render_bundle from webpack_loader %}
 
 {% block title %}
     {{ block.super }}
@@ -6,4 +7,20 @@
 {% endblock %}
 
 {% block content %}
+    <div id="react-weather-graph"></div>
+
+    <script>
+        $(document).ready(function () {                                                 
+            weatherGraph([
+                {% for data in results %}
+                    {
+                        created: Date.parse("{{ data.created }}"),
+                        temperature: {{ data.temperature }},
+                        humidity: {{ data.humidity }},
+                    },
+                {% endfor %}
+            ]);
+        });
+    </script>
+    {% render_bundle 'weather_graph' %}
 {% endblock %}
