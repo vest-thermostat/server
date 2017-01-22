@@ -8,6 +8,7 @@ const TimeSeries = require("pondjs").TimeSeries;
 const TimeRange = require("pondjs").TimeRange;
 const styler = require("react-timeseries-charts").styler;
 const Gauge = require("react-svg-gauge");
+const Websocket = require("react-websocket");
 
 // require("./WeatherGraph.scss");
 
@@ -22,24 +23,24 @@ class WeatherGraph extends React.Component {
 
         this.state = {
             datas: sorted,
-            times: sorted.map((x) => {return x.created}),
-            temperatures: new TimeSeries({
-                    name: "temperatures", 
-                    columns: ["time", "temp"],
-                    points: sorted.map((x) => {return [x.created, x.temperature]}),
-            }),
-            humidities: new TimeSeries({
-                    name: "humidities", 
-                    columns: ["time", "humidity"],
-                    points: sorted.map((x) => {return [x.created, x.humidity]}),
-            }),
         }
-        this.state.begin = this.state.times[0];
-        this.state.finish = this.state.times[sorted.length - 1];
     }
 
     _getLast(key) {
         return this.state.datas[this.state.datas.length - 1][key];
+    }
+
+    newWeatherData(data) {
+        const result = JSON.parse(data);
+        console.log(result);
+        if (result.created && result.temperature && result.humidity) {
+            result.created = Date.parse(result.created);
+            let newDatas = this.state.datas.concat([result]);
+            newDatas.splice(0, 1);
+            this.setState({
+                datas: newDatas
+            });
+        }
     }
 
     render () {
@@ -48,7 +49,26 @@ class WeatherGraph extends React.Component {
             {key: "humidity", color: "blue"},
         ]);
 
-        const timeRange = new TimeRange(this.state.begin, this.state.finish);
+        const d = this.state.datas;
+
+        console.log(d);
+
+        const times = d.map((x) => {return x.created});
+        const temperatures = new TimeSeries({
+                name: "temperatures", 
+                columns: ["time", "temp"],
+                points: d.map((x) => {return [x.created, x.temperature]}),
+        });
+        const humidities = new TimeSeries({
+                name: "humidities", 
+                columns: ["time", "humidity"],
+                points: d.map((x) => {return [x.created, x.humidity]}),
+        });
+
+        const begin = times[0];
+        const finish = times[d.length - 1];
+
+        const timeRange = new TimeRange(begin, finish);
         return (
             <div>
                 <ChartContainer timeRange={timeRange}>
@@ -65,13 +85,13 @@ class WeatherGraph extends React.Component {
                             <LineChart
                                 axis="temp"
                                 style={style}
-                                series={this.state.temperatures}
+                                series={temperatures}
                                 columns={["temp"]}
                             />
                             <LineChart
                                 axis="humidity"
                                 style={style}
-                                series={this.state.humidities}
+                                series={humidities}
                                 columns={["humidity"]}
                             />
                         </Charts>
@@ -104,6 +124,7 @@ class WeatherGraph extends React.Component {
                         />
                     </div>
                 </div>
+                <Websocket url='ws://127.0.0.1:8000/' onMessage={this.newWeatherData.bind(this)}/>
             </div>
         );
     }

@@ -29,6 +29,7 @@
     "pondjs": "^0.7.2",
     "react-dom": "^15.4.1",
     "react-svg-gauge": "^1.0.4",
-    "react-timeseries-charts": "^0.11.1"
+    "react-timeseries-charts": "^0.11.1",
+    "react-websocket": "^1.1.6"
   }
 }
