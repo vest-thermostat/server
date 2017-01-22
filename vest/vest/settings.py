@@ -27,8 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '172.23.218.116',
-    '192.168.0.208',
+    '192.168.0.202',
     '127.0.0.1',
+    '192.168.0.219',
     'localhost',
 ]
 
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     'rest_framework',
     'rest_framework.authtoken',
+    'channels',
     'sekizai',
     'bootstrap3',
     'world',
@@ -158,7 +160,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
 )
 
-
 LOGIN_REDIRECT_URL = '/'
 
 REST_FRAMEWORK = {
@@ -169,4 +170,15 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     )
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+            "hosts": [("localhost", 6379)],
+        },
+        "ROUTING": "weather.routing.channel_routing",
+    },
 }

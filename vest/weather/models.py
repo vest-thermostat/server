@@ -25,3 +25,5 @@ class PrivateWeather(models.Model):
 
     class Meta:
         ordering = ('-created',)
+
+from weather import signals

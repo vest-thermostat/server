@@ -40,6 +40,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 ## Run
 
 ```
+ $ systemctl start postgresql
+ $ systemctl start redis
  $ cd vest
  $ python manage.py migrate
  $ python manage.py runserver
