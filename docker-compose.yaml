@@ -8,16 +8,18 @@ services:
     volumes:
       - ./vest:/vest
       - ./config/nginx:/etc/nginx/conf.d
+      - ./vest/vest/static:/static
     depends_on:
       - web
   web:
     build: .
     container_name: django
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn mydjango.wsgi -b 0.0.0.0:8000"
+    command: bash -c "python3 manage.py collectstatic --noinput && python3 manage.py makemigrations && python3 manage.py migrate && gunicorn vest.wsgi -b 0.0.0.0:8000"
     depends_on:
       - db
     volumes:
       - ./vest:/vest
+      - ./vest/vest/static:/static
     expose:
       - "8000"
 
