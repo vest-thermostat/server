@@ -5,3 +5,5 @@ django-sekizai
 django-webpack-loader
 channels
 asgi_redis
+psycopg2
+gunicorn
