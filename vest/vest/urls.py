@@ -20,14 +20,14 @@ from rest_framework.authtoken import views
 
 from weather.views import WeatherList, PrivateWeatherList, PersonalTemperatureList
 from location.views import LocationList
-from users.views import UserProfileView
+# from users.views import UserProfileView
 
 router = routers.DefaultRouter()
 router.register(r'weather/own', PrivateWeatherList, base_name='weather_own')
 router.register(r'weather/public', WeatherList, base_name='weather_public')
 router.register(r'weather/set', PersonalTemperatureList, base_name='weather_set')
 router.register(r'location', LocationList, base_name='location')
-router.register(r'users', UserProfileView, base_name='users')
+# router.register(r'users', UserProfileView, base_name='users')
 
 urlpatterns = [
     url(r'^api-auth/', views.obtain_auth_token),
