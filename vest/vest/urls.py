@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.contrib.gis import admin
 from rest_framework import routers
 from rest_framework.authtoken import views
+from rest_framework_swagger.views import get_swagger_view
 
 from weather.views import WeatherList, PrivateWeatherList, PersonalTemperatureList
 from location.views import LocationList
@@ -33,5 +34,6 @@ urlpatterns = [
     url(r'^api-auth/', views.obtain_auth_token),
     url(r'^admin/', admin.site.urls),
     url(r'users/', include('users.urls')),
+    url(r'docs/', get_swagger_view(title='VEST API')),
     url(r'^', include(router.urls)),
 ]

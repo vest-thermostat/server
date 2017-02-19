@@ -1,5 +1,6 @@
-django
+django>1.10
 djangorestframework
+django-rest-swagger
 django-bootstrap3
 django-sekizai
 django-webpack-loader
