@@ -14,9 +14,10 @@ services:
   web:
     build: .
     container_name: django
-    command: bash -c "python3 manage.py collectstatic --noinput && python3 manage.py makemigrations && python3 manage.py migrate && gunicorn vest.wsgi -b 0.0.0.0:8000"
+    command: bash -c "sleep 10 && python3 manage.py collectstatic --noinput && python3 manage.py makemigrations && python3 manage.py migrate && gunicorn vest.wsgi -b 0.0.0.0:8000"
     depends_on:
       - db
+      - redis
     volumes:
       - ./vest:/vest
       - ./vest/vest/static:/static
@@ -24,5 +25,12 @@ services:
       - "8000"
 
   db:
-    image: mdillon/postgis
+    restart: always
+    image: mdillon/postgis:latest
     container_name: pgis
+    expose:
+      - "5432"
+
+  redis:
+    restart: always
+    image: redis:latest
