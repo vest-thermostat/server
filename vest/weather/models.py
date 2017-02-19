@@ -9,9 +9,6 @@ class PersonalTemperature(models.Model):
     temperature = models.FloatField()
     owner = models.ForeignKey('users.VestUser', on_delete=models.CASCADE)
 
-    # @staticmethod
-    # def getCurrent(user):
-
     class Meta:
         get_latest_by = "created"
         ordering = ('-created',)
@@ -39,6 +36,7 @@ class PrivateWeather(models.Model):
     # fromThermostat = models.CharField()
     temperature = models.FloatField()
     humidity = models.FloatField()
+    # heat = models.BooleanField(default=False)
     owner = models.ForeignKey('users.VestUser', on_delete=models.CASCADE)
 
     class Meta:

@@ -17,10 +17,8 @@ class LocationList(viewsets.ModelViewSet):
             IsOwner,
     )
 
-    def get_queryset(self, request):
-        queryset = UserLocation.objects.filter(owner=request.user)
-        serializer = LocationSerializer(queryset, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return UserLocation.objects.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
         if not serializer.is_valid():
