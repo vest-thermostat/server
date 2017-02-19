@@ -53,3 +53,25 @@ Type "help", "copyright", "credits" or "license" for more information.
  $ # In ./vest/ folder
  $ python manage.py createsuperuser
 ```
+
+## Setup with docker-compose
+
+Alternatively you can launch the app into a docker just like that:
+
+```
+docker-compose up -d
+```
+
+You of course need to install `docker` and `docker-compose` and need to setup your settings for your docker. For instance:
+
+```
+{
+    'ENGINE': 'django.contrib.gis.db.backends.postgis',
+    'NAME': 'postgres',
+    'USER': 'postgres',
+    'PORT': '5432',
+    'HOST': 'db',
+}
+```
+
+
