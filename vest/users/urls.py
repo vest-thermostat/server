@@ -27,7 +27,6 @@ urlpatterns = [
 
 # urlpatterns = [
 #     url(r'^register/$', Registration.as_view(), name='register'),
-#     url(r'', include('rest_registration.api.urls')),
 #     url(r'^login/$', auth_views.login,
 #         {'template_name': 'login.html'},
 #         name='login'

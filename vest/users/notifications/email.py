@@ -1,8 +1,8 @@
 from django.core.mail.message import EmailMessage
 from django.template.loader import get_template
 
-from rest_registration.settings import registration_settings
-from rest_registration.utils import get_user_setting
+from users.settings import registration_settings
+from users.utils import get_user_setting
 
 
 def send_verification(user, params_signer, template_config):

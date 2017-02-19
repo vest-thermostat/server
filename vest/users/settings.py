@@ -57,7 +57,7 @@ DEFAULTS = {
     'VERIFICATION_REPLY_TO_EMAIL': None,
 
     'SUCCESS_RESPONSE_BUILDER': (
-        'rest_registration.utils.build_default_success_response')
+        'users.utils.build_default_success_response')
 }
 
 IMPORT_STRINGS = (
