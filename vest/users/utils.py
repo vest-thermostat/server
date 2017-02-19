@@ -3,8 +3,8 @@ from django.conf import settings
 from django.core.signing import BadSignature, SignatureExpired
 from rest_framework.response import Response
 
-from rest_registration.exceptions import BadRequest
-from rest_registration.settings import registration_settings
+from users.exceptions import BadRequest
+from users.settings import registration_settings
 
 
 def get_user_model_class():
