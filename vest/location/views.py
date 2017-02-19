@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.exceptions import ValidationError
 
 from location.models import UserLocation
 from location.serializers import LocationSerializer
@@ -16,8 +17,13 @@ class LocationList(viewsets.ModelViewSet):
             IsOwner,
     )
 
+    def get_queryset(self, request):
+        queryset = UserLocation.objects.filter(owner=request.user)
+        serializer = LocationSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def perform_create(self, serializer):
-        if self.request.user.balance < serializer.price:
-            raise serializers.ValidationError("Pas assez d'argent dans la balance")
-        else:
-            serializer.save(owner=self.request.user)
+        if not serializer.is_valid():
+            raise ValidationError()
+
+        serializer.save(owner=self.request.user)
