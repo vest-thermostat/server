@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '172.23.218.116',
     '192.168.0.202',
+    '192.168.0.102',
     '127.0.0.1',
     '192.168.0.219',
     'localhost',
@@ -40,6 +41,15 @@ WEBPACK_LOADER = {
     }
 }
 
+REST_REGISTRATION = {
+    'REGISTER_VERIFICATION_ENABLED': False,
+
+    'RESET_PASSWORD_VERIFICATION_URL': '/reset-password/',
+
+    'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
+
+    'VERIFICATION_FROM_EMAIL': 'no-reply@example.com',
+}
 
 # Application definition
 
@@ -53,7 +63,9 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'webpack_loader',
     'rest_framework',
+    'rest_framework_gis',
     'rest_framework.authtoken',
+    'rest_framework_swagger',
     'channels',
     'sekizai',
     'bootstrap3',
