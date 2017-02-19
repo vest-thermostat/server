@@ -25,10 +25,12 @@ class PersonalTemperatureList(viewsets.ModelViewSet):
     serializer_class = PersonalTemperatureSerializer
     permission_classes = (
             permissions.IsAuthenticated,
-            IsOwner,
     )
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'weather_overview.html'
+
+    def get_queryset(self):
+        return PersonalTemperature.objects.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -44,6 +46,9 @@ class PrivateWeatherList(viewsets.ModelViewSet):
     )
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'weather_overview.html'
+
+    def get_queryset(self):
+        return PrivateWeather.objects.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
