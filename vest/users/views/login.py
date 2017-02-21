@@ -1,5 +1,10 @@
 from django.contrib import auth
 from rest_framework import serializers
+# from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.settings import api_settings
@@ -16,58 +21,69 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 
-@api_view(['POST'])
-def login(request):
-    '''
+class Login(generics.RetrieveAPIView):
+    """
     Logs in the user via given login and password.
     ---
     serializer: LoginSerializer
-    '''
-    serializer = LoginSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    data = serializer.data
+    """
 
-    user_class = get_user_model_class()
-    login_fields = (registration_settings.USER_LOGIN_FIELDS or
-                    getattr(user_class, 'LOGIN_FIELDS', None) or
-                    [user_class.USERNAME_FIELD])
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'login.html'
 
-    for field_name in login_fields:
-        kwargs = {
-            field_name: data['login'],
-            'password': data['password'],
-        }
-        user = auth.authenticate(**kwargs)
-        if user:
-            break
+    def get(self, request, format=None):
+        return Response({})
 
-    if not user:
-        raise BadRequest('Login or password invalid.')
+    def post(self, request, format=None):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.data
 
-    if should_authenticate_session():
-        auth.login(request, user)
+        user_class = get_user_model_class()
+        login_fields = (registration_settings.USER_LOGIN_FIELDS or
+                        getattr(user_class, 'LOGIN_FIELDS', None) or
+                        [user_class.USERNAME_FIELD])
 
-    extra_data = {}
+        for field_name in login_fields:
+            kwargs = {
+                field_name: data['login'],
+                'password': data['password'],
+            }
+            user = auth.authenticate(**kwargs)
+            if user:
+                break
 
-    if should_retrieve_token():
-        token, _ = Token.objects.get_or_create(user=user)
-        extra_data['token'] = token.key
+        if not user:
+            raise BadRequest('Login or password invalid.')
 
-    return get_ok_response('Login successful', extra_data=extra_data)
+        if should_authenticate_session():
+            auth.login(request, user)
+
+        extra_data = {}
+
+        if should_retrieve_token():
+            token, _ = Token.objects.get_or_create(user=user)
+            extra_data['token'] = token.key
+
+        return get_ok_response('Login successful', extra_data=extra_data)
 
 
-@api_view(['POST'])
-def logout(request):
+class Logout(generics.RetrieveAPIView):
     '''
     Logs out the user. returns an error if the user is not
     authenticated.
     '''
-    if not request.user.is_authenticated():
-        raise BadRequest('Not logged in')
 
-    auth.logout(request)
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'logout.html'
 
-    return get_ok_response('Logout successful')
+    def get(self, request):
+        if not request.user.is_authenticated():
+            raise BadRequest('Not logged in')
+
+        auth.logout(request)
+
+        return get_ok_response('Logout successful')
 
 
 def should_authenticate_session():
