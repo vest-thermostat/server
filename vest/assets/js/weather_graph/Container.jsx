@@ -66,11 +66,18 @@ export default class Container extends React.Component {
             <div style={flexStyle} className="container main-container">
                 {this.render_errors()}
                 <div className="panel panel-default">
+                    <div className="panel-heading">
+                        Température du thermostat VEST.
+                    </div>
                     <div className="panel-body">
-                        <WeatherGraph datas={this.state.weathers}/>
+                        <div className="panel panel-default">
+                            <div className="panel-body">
+                                <WeatherGraph datas={this.state.weathers}/>
+                            </div>
+                        </div>
+                    <TemperatureGauge data={this.state.weathers.length ? this.state.weathers[this.state.weathers.length - 1] : []}/>
                     </div>
                 </div>
-                <TemperatureGauge data={this.state.weathers.length ? this.state.weathers[this.state.weathers.length - 1] : []}/>
             </div>
         );
     }
