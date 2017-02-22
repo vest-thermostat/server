@@ -50,18 +50,26 @@ export default class Container extends React.Component {
     }
 
     render () {
-        const mainStyle = {
-            display: 'flex',
-            flex_direction: 'column',
-            justify: 'center',
-            align_items: 'center',
-            height: '100%',
+        const flexStyle = {
+            'display': 'flex',
+            'flex-direction': 'column',
+            'justify': 'center',
+            'align-items': 'center',
+            'height': '100%',
         };
 
+        const flexRow = {
+            '-webkit-flex': '1',
+        }
+
         return (
-            <div style={mainStyle} className="container main-container">
+            <div style={flexStyle} className="container main-container">
                 {this.render_errors()}
-                <WeatherGraph datas={this.state.weathers}/>
+                <div className="panel panel-default">
+                    <div className="panel-body">
+                        <WeatherGraph datas={this.state.weathers}/>
+                    </div>
+                </div>
                 <TemperatureGauge data={this.state.weathers.length ? this.state.weathers[this.state.weathers.length - 1] : []}/>
             </div>
         );
