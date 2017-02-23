@@ -27,8 +27,8 @@ export default class Container extends React.Component {
     componentDidMount () {
         this.ws = new WebSocket('ws://127.0.0.1:8000/')
         this.ws.onmessage = e => {
-            if (e.created && e.temperature && e.humidity) {
-                const json = JSON.parse(e.data);
+            const json = JSON.parse(e.data);
+            if (json.created && json.temperature && json.humidity) {
                 json.created = Date.parse(json.created);
                 let newWeathers = this.state.weathers.concat([json]);
                 if (this.state.weathers.length < 100) {
@@ -42,7 +42,6 @@ export default class Container extends React.Component {
     }
 
     render_errors () {
-        console.log(JSON.stringify(this.state));
         if (this.state.errors.length) {
             return this.state.errors.map(x => (
                 <Alert bsStyle="danger">
