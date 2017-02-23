@@ -1,7 +1,6 @@
 var path = require("path");
+var BundleTracker = require('webpack-bundle-tracker');                                                                                                                           
 var webpack = require('webpack');
-var BundleTracker = require('webpack-bundle-tracker');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   context: __dirname,
@@ -10,55 +9,60 @@ module.exports = {
     weather_graph: [
       './assets/js/weather_graph/index',
     ],
+    // location_map: [
+    //   './assets/js/location_map/index',
+    // ]
   },
 
   output: {
-      path: path.resolve('./assets/bundles/'),
-      filename: '[name]-[hash].js',
+    path: path.resolve('./assets/bundles/'),
+    filename: '[name]-[hash].js',
   },
 
   plugins: [
     new BundleTracker({filename: './webpack-stats.json'}),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: "common",
+    //   filename: "common.js",
+    //   minChunks: 2,
+    // }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: "common",
+      filename: "common.js",
+      minChunks: 2,
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      beautify: false,
-      comments: false,
-      compress: {
-        warnings: false,
-        drop_console: true
-      },
-      mangle: {
-        except: ['$'],
-        screw_ie8 : true,
-        keep_fnames: false,
-      }
-    }),
-    new ExtractTextPlugin('public/style.css', {
-      allChunks: true
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false
     }),
   ],
 
   module: {
-    loaders: [
-      { test: /\.jsx?$/,
+    rules: [
+      { 
+        test: /\.jsx?$/,
         exclude: /node_modules/, 
         loader: 'babel-loader',
-        query: {
-          presets:['es2015', 'react'],
+        options: {
+          presets:[
+            ['es2015', {modules: false}], 
+            'react'
+          ],
         },
       }, {
         test: /\.scss$/,
-        loaders: ['style', 'css', 'sass', ExtractTextPlugin.extract('css!sass')]
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
       },
     ],
   },
 
   resolve: {
-    modulesDirectories: ['node_modules', 'bower_components'],
-    extensions: ['', '.js', '.jsx']
+    modules: ['node_modules', 'bower_components'],
+    extensions: ['.js', '.jsx']
   },
 };
