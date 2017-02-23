@@ -1,6 +1,9 @@
 import React from 'react';
+import { Panel, Alert, Grid } from 'react-bootstrap';
+import Center from 'react-center';
 import WeatherGraph from './WeatherGraph.jsx';
 import TemperatureGauge from './Gauge.jsx';
+import Controller from './Controller.jsx';
 
 export default class Container extends React.Component {
     static propTypes: {
@@ -39,11 +42,11 @@ export default class Container extends React.Component {
     render_errors () {
         if (this.state.errors.length) {
             return this.state.errors.map(x => (
-                <div className="alert alert-danger" role="alert">
+                <Alert bsStyle="danger">
                     <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                     <span className="sr-only">Erreur:</span>
                     {x}
-                </div>
+                </Alert>
             ));
         }
         return null;
@@ -59,26 +62,29 @@ export default class Container extends React.Component {
         };
 
         const flexRow = {
-            '-webkit-flex': '1',
+            'margin': 'auto',
+            // '-webkit-flex': '1',
         }
 
         return (
-            <div style={flexStyle} className="container main-container">
+            <Grid>
                 {this.render_errors()}
-                <div className="panel panel-default">
-                    <div className="panel-heading">
-                        Température du thermostat VEST.
-                    </div>
-                    <div className="panel-body">
-                        <div className="panel panel-default">
-                            <div className="panel-body">
-                                <WeatherGraph datas={this.state.weathers}/>
-                            </div>
-                        </div>
-                    <TemperatureGauge data={this.state.weathers.length ? this.state.weathers[this.state.weathers.length - 1] : []}/>
-                    </div>
-                </div>
-            </div>
+                <Panel header={"Température du thermostat VEST."}>
+                    <Panel>
+                        <Center>
+                            <WeatherGraph style={flexStyle} datas={this.state.weathers}/>
+                        </Center>
+                    </Panel>
+                    <Center>
+                        <TemperatureGauge style={flexStyle} data={this.state.weathers.length ? this.state.weathers[this.state.weathers.length - 1] : []}/>
+                    </Center>
+                    <Panel header={"Controller la temperature du thermostat VEST."}>
+                        <Center>
+                            <Controller/>
+                        </Center>
+                    </Panel>
+                </Panel>
+            </Grid>
         );
     }
 }

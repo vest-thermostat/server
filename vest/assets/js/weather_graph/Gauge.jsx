@@ -1,4 +1,5 @@
 import React from 'react';
+import { Row, Col } from 'react-bootstrap';
 const Gauge = require("react-svg-gauge");
 
 export default class TemperatureGauge extends React.Component {
@@ -8,8 +9,8 @@ export default class TemperatureGauge extends React.Component {
 
     render () {
         return (
-            <div className="row">
-                <div className="col-md-6">
+            <Row>
+                <Col xs={12} md={6}>
                     <Gauge className="gauge"
                         value={this.props.data.temperature} 
                         min={-10} max={70} 
@@ -17,16 +18,16 @@ export default class TemperatureGauge extends React.Component {
                         color="orange" label="Temperature"
                         valueLabelStyle={{textAnchor: "middle", fontSize: '22px', opacity: 0.5}}
                     />
-                </div>
-                <div className="col-md-6">
+                </Col>
+                <Col xs={12} md={6}>
                     <Gauge className="gauge"
                         value={this.props.data.humidity} 
                         width={220} height={200} 
                         color="blue" label="Humidity" 
                         valueLabelStyle={{textAnchor: "middle", fontSize: '44px', opacity: 0.5}}
                     />
-                </div>
-            </div>
+                </Col>
+            </Row>
         );
     }
 }
