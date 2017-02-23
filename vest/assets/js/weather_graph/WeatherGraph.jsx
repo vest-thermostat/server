@@ -5,6 +5,7 @@ import {
     ChartRow, 
     YAxis,
     LineChart, 
+    Resizable,
     styler,
 } from 'react-timeseries-charts';
 import {
@@ -19,27 +20,11 @@ export default class WeatherGraph extends React.Component {
         datas: React.PropTypes.array.isRequired,
     }
 
-    // constructor(props) {
-    //     super(props);
-
-    //     this.state = {
-    //         datas: sorted,
-    //     }
-    // }
-
     render () {
         const style = styler([
             {key: "temp", color: "orange"},
             {key: "humidity", color: "blue"},
         ]);
-
-        const mainStyle = {
-            display: 'flex',
-            flex_direction: 'column',
-            justify: 'center',
-            align_items: 'center',
-            height: '100%',
-        };
 
         const d = this.props.datas;
         const times = d.map((x) => {return x.created});
@@ -59,8 +44,8 @@ export default class WeatherGraph extends React.Component {
 
         const timeRange = new TimeRange(begin, finish);
         return (
-            <div>
-                <ChartContainer className="row" timeRange={timeRange}>
+            <Resizable>
+                <ChartContainer timeRange={timeRange}>
                     <ChartRow height="150">
                         <YAxis 
                             id="temp"
@@ -94,7 +79,7 @@ export default class WeatherGraph extends React.Component {
                             format=",.1f"/>
                     </ChartRow>
                 </ChartContainer>
-            </div>
+            </Resizable>
         );
     }
 }

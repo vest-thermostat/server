@@ -27,19 +27,22 @@ export default class Container extends React.Component {
     componentDidMount () {
         this.ws = new WebSocket('ws://127.0.0.1:8000/')
         this.ws.onmessage = e => {
-            const json = JSON.parse(e.data);
-            json.created = Date.parse(json.created);
-            let newWeathers = this.state.weathers.concat([json]);
-            if (this.state.weathers.length < 100) {
-                newWeathers.splice(0, 1);
+            if (e.created && e.temperature && e.humidity) {
+                const json = JSON.parse(e.data);
+                json.created = Date.parse(json.created);
+                let newWeathers = this.state.weathers.concat([json]);
+                if (this.state.weathers.length < 100) {
+                    newWeathers.splice(0, 1);
+                }
+                this.setState({ weathers: newWeathers })
             }
-            this.setState({ weathers: newWeathers })
         };
         this.ws.onerror = e => this.setState({ error: ['WebSocket error'] })
         this.ws.onclose = e => !e.wasClean && this.setState({ error: [`WebSocket error: ${e.code} ${e.reason}`] })
     }
 
     render_errors () {
+        console.log(JSON.stringify(this.state));
         if (this.state.errors.length) {
             return this.state.errors.map(x => (
                 <Alert bsStyle="danger">
@@ -71,9 +74,7 @@ export default class Container extends React.Component {
                 {this.render_errors()}
                 <Panel header={"Température du thermostat VEST."}>
                     <Panel>
-                        <Center>
-                            <WeatherGraph style={flexStyle} datas={this.state.weathers}/>
-                        </Center>
+                        <WeatherGraph style={flexStyle} datas={this.state.weathers}/>
                     </Panel>
                     <Center>
                         <TemperatureGauge style={flexStyle} data={this.state.weathers.length ? this.state.weathers[this.state.weathers.length - 1] : []}/>
