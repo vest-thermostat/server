@@ -1,27 +1,8 @@
 from channels import Group
 from channels.sessions import channel_session
 from channels.auth import http_session_user, channel_session_user, channel_session_user_from_http
-from .models import PrivateWeather
+from weather.models import PrivateWeather
 import json
-
-# @channel_session
-# def ws_connect(message):
-#     prefix, token = message['weather'].strip('/').split('/')
-#     weathers = PrivateWeather.objects.all()
-#     # Group('weather-' + str(token)).add(message.reply_channel)
-#     message.channel_session['weathers'] = weathers
-
-# def msg_consumer(message):
-#     # Save to model
-#     room = message.content['room']
-#     ChatMessage.objects.create(
-#         room=room,
-#         message=message.content['message'],
-#     )
-#     # Broadcast to listening sockets
-#     Group("chat-%s" % room).send({
-#         "text": message.content['message'],
-#     })
 
 @channel_session_user_from_http
 def ws_add(message):

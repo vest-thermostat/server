@@ -25,7 +25,7 @@ export default class Container extends React.Component {
     }
 
     componentDidMount () {
-        this.ws = new WebSocket('ws://127.0.0.1:8000/')
+        this.ws = new WebSocket('ws://127.0.0.1:8000/weather')
         this.ws.onmessage = e => {
             const json = JSON.parse(e.data);
             if (json.created && json.temperature && json.humidity) {
