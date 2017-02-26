@@ -11,7 +11,11 @@ module.exports = {
     ],
     location_map: [
       './assets/js/location_map/index',
-    ]
+    ],
+    set_preference: [
+      './assets/js/set_preference/index',
+    ],
+
   },
 
   output: {
@@ -41,7 +45,7 @@ module.exports = {
           ],
         },
       }, {
-        test: /\.scss$/,
+        test: [/\.scss$/, /\.css$/],
         loaders: ['style-loader', 'css-loader', 'sass-loader']
       }, {
         test: /\.png$/,
