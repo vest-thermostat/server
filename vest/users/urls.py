@@ -7,7 +7,7 @@ from .views import (change_password, profile,
 import users.views as views
 
 urlpatterns = [
-    url('register/$', register, name='register'),
+    url('register/$', views.Register.as_view(), name='register'),
     url('verify-registration/$', verify_registration),
 
     url('send-reset-password-link/$', send_reset_password_link),
