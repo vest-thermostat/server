@@ -4,7 +4,7 @@ services:
     image: nginx:latest
     container_name: nginx
     ports:
-      - "8000:8000"
+      - "80:80"
     volumes:
       - ./vest:/vest
       - ./config/nginx:/etc/nginx/conf.d
@@ -14,7 +14,7 @@ services:
   web:
     build: .
     container_name: django
-    command: bash -c "sleep 10 && python3 manage.py collectstatic --noinput && python3 manage.py makemigrations && python3 manage.py migrate && gunicorn vest.wsgi -b 0.0.0.0:8000"
+    command: bash -c "sleep 10 && python3 manage.py collectstatic --noinput && python3 manage.py makemigrations && python3 manage.py migrate && gunicorn vest.wsgi -b 0.0.0.0:80"
     depends_on:
       - db
       - redis
