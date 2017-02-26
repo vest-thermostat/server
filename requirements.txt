@@ -5,6 +5,7 @@ django-rest-swagger
 django-bootstrap3
 django-sekizai
 django-webpack-loader
+django-jsonify
 channels
 asgi_redis
 psycopg2
