@@ -14,15 +14,15 @@ services:
   web:
     build: .
     container_name: django
-    command: bash -c "sleep 10 && python3 manage.py collectstatic --noinput && python3 manage.py makemigrations && python3 manage.py migrate && gunicorn vest.wsgi -b 0.0.0.0:80"
+    command: bash -c "sleep 10 && npm install && npm run build && python3 manage.py collectstatic --noinput && python3 manage.py makemigrations && python3 manage.py migrate && daphne vest.asgi:channel_layer -b 0.0.0.0 -p 80"
     depends_on:
       - db
+    links:
       - redis
     volumes:
       - ./vest:/vest
-      - ./vest/vest/static:/static
     expose:
-      - "8000"
+      - "80"
 
   db:
     restart: always
@@ -32,5 +32,6 @@ services:
       - "5432"
 
   redis:
-    restart: always
     image: redis:latest
+    expose:
+      - "6379"
