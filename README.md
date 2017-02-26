@@ -72,6 +72,17 @@ You of course need to install `docker` and `docker-compose` and need to setup yo
     'PORT': '5432',
     'HOST': 'db',
 }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+        "ROUTING": "realtime.routing.channel_routing",
+    },
+}
 ```
+
 
 
