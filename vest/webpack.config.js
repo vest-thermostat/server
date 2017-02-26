@@ -9,9 +9,9 @@ module.exports = {
     weather_graph: [
       './assets/js/weather_graph/index',
     ],
-    // location_map: [
-    //   './assets/js/location_map/index',
-    // ]
+    location_map: [
+      './assets/js/location_map/index',
+    ]
   },
 
   output: {
@@ -43,12 +43,16 @@ module.exports = {
       }, {
         test: /\.scss$/,
         loaders: ['style-loader', 'css-loader', 'sass-loader']
-      },
+      }, {
+        test: /\.png$/,
+        loader: "url-loader",
+        query: { mimetype: "image/png" }
+      }
     ],
   },
 
   resolve: {
-    modules: ['node_modules', 'bower_components'],
+    modules: ['node_modules'],
     extensions: ['.js', '.jsx']
   },
 };

@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.exceptions import ValidationError
+from rest_framework.renderers import TemplateHTMLRenderer
 
 from location.models import UserLocation
 from location.serializers import LocationSerializer
@@ -16,6 +17,8 @@ class LocationList(viewsets.ModelViewSet):
             permissions.IsAuthenticated,
             IsOwner,
     )
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'location.html'
 
     def get_queryset(self):
         return UserLocation.objects.filter(owner=self.request.user)
