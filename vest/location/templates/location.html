@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load sekizai_tags %}
+{% load jsonify %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+    {{ block.super }}
+    Localisation
+{% endblock %}
+
+{% block head %}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />                                                                                              
+
+<style>
+    h1, h2, p {
+      text-align: center;
+    }
+    .leaflet-container {
+      height: 600px;
+      width: 80%;
+      margin: 0 auto;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <!-- <h3> -->
+    <!--     Localisation -->
+    <!-- </h3> -->
+    <!-- <hr> -->
+    <div id="react-location-map" class="leaflet-container"></div>
+    <script>
+        $(document).ready(function () {
+            locationMap({{ results | jsonify }});
+        })
+    </script>
+    {% render_bundle 'location_map' %}
+<div>
+
+{% endblock %}

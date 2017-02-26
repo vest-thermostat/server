@@ -1,9 +1,11 @@
 from django.http import Http404
 from rest_framework import status
 from rest_framework import serializers
+from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.renderers import TemplateHTMLRenderer
 
 from users.notifications import send_verification
 from users.utils import (
@@ -29,38 +31,45 @@ class RegisterSigner(URLParamsSigner):
         return registration_settings.REGISTER_VERIFICATION_PERIOD
 
 
-@serializer_class_getter(
-    lambda: registration_settings.REGISTER_SERIALIZER_CLASS)
-@api_view(['POST'])
-def register(request):
-    '''
-    Register new user.
-    '''
-    serializer_class = registration_settings.REGISTER_SERIALIZER_CLASS
-    serializer = serializer_class(data=request.data)
-    serializer.is_valid(raise_exception=True)
+class Register(generics.RetrieveAPIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'register.html'
 
-    kwargs = {}
+    def get(self, request, format=None):
+        return Response({})
 
-    if registration_settings.REGISTER_VERIFICATION_ENABLED:
-        verification_flag_field = get_user_setting('VERIFICATION_FLAG_FIELD')
-        kwargs[verification_flag_field] = False
+    # @serializer_class_getter(
+    #     lambda: registration_settings.REGISTER_SERIALIZER_CLASS
+    # )
+    def post(self, request, format=None):
+        '''
+        Register new user.
+        '''
+        serializer_class = registration_settings.REGISTER_SERIALIZER_CLASS
+        serializer = serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-    user = serializer.save(**kwargs)
+        kwargs = {}
 
-    profile_serializer_class = registration_settings.PROFILE_SERIALIZER_CLASS
-    profile_serializer = profile_serializer_class(instance=user)
-    user_data = profile_serializer.data
+        if registration_settings.REGISTER_VERIFICATION_ENABLED:
+            verification_flag_field = get_user_setting('VERIFICATION_FLAG_FIELD')
+            kwargs[verification_flag_field] = False
 
-    if registration_settings.REGISTER_VERIFICATION_ENABLED:
-        signer = RegisterSigner({
-            'user_id': user.pk,
-        }, request=request)
-        template_config = (
-            registration_settings.REGISTER_VERIFICATION_EMAIL_TEMPLATES)
-        send_verification(user, signer, template_config)
+        user = serializer.save(**kwargs)
 
-    return Response(user_data, status=status.HTTP_201_CREATED)
+        profile_serializer_class = registration_settings.PROFILE_SERIALIZER_CLASS
+        profile_serializer = profile_serializer_class(instance=user)
+        user_data = profile_serializer.data
+
+        if registration_settings.REGISTER_VERIFICATION_ENABLED:
+            signer = RegisterSigner({
+                'user_id': user.pk,
+            }, request=request)
+            template_config = (
+                registration_settings.REGISTER_VERIFICATION_EMAIL_TEMPLATES)
+            send_verification(user, signer, template_config)
+
+        return Response(user_data, status=status.HTTP_201_CREATED)
 
 
 class VerifyRegistrationSerializer(serializers.Serializer):

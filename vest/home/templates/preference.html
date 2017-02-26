@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load sekizai_tags %}
+{% load jsonify %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}
+    {{ block.super }}
+    Preferences
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h3>
+        Preferences
+    </h3>
+    <hr>
+    <div id="react-preference-selection"></div>
+    <script>
+        $(document).ready(function () {
+            preferenceSelection({{ results | jsonify }});
+        })
+    </script>
+    {% render_bundle 'set_preference' %}
+<div>
+
+{% endblock %}
