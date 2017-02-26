@@ -2,59 +2,71 @@
 
 {% block title %}
     {{ block.super }}
-    Register
+    S'enregistrer
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
-    <form action="{% url "register" %}" method="post" class="form">
-        {% csrf_token %}
-
+    {% if request.user %}
         <div class="panel panel-default">
             <div class="panel-heading">
                 S'enregistrer
             </div>
             <div class="panel-body">
-                <div class="input-group">
-                    <span class="input-group-addon glyphicon glyphicon-user" id="basic-addon1"></span>
-                    <input type="text" class="form-control" name="username" placeholder="Nom d'utilisateur" aria-describedby="basic-addon1">
-                </div>
-                <hr>
-                <div class="input-group">
-                    <span class="input-group-addon" id="firstname-addon"></span>
-                    <input type="text" class="form-control" name="firstname" placeholder="Prénom" aria-describedby="firstname-addon">
-                </div>
-                <hr>
-                <div class="input-group">
-                    <span class="input-group-addon" id="secondname-addon"></span>
-                    <input type="text" class="form-control" name="lastname" placeholder="Nom de famille" aria-describedby="secondname-addon">
-                </div>
-                <hr>
-                <div class="input-group">
-                    <span class="input-group-addon" id="email-addon">@</span>
-                    <input type="text" class="form-control" name="email" placeholder="Adresse mail" aria-describedby="email-addon">
-                </div>
-                <hr>
-                <div class="input-group">
-                    <span class="input-group-addon glyphicon glyphicon-menu-right" id="password-addon"></span>
-                    <input type="password" class="form-control" name="password" placeholder="Mot de passe" aria-describedby="password-addon">
-                </div>
-                <hr>
-                <div class="input-group">
-                    <span class="input-group-addon glyphicon glyphicon-menu-right" id="confirm-addon"></span>
-                    <input type="password" class="form-control" name="password_confirm" placeholder="Confirmez le mot de passe" aria-describedby="confirm-addon">
-                </div>
-            </div>
-            <div class="panel-footer">
-                <button type="submit" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-ok-sign"></span>
-                    Envoyer
-                </button>
+                Vous êtes connecté.
             </div>
         </div>
 
-    </form>
+    {% else %}
+        <form action="{% url "register" %}" method="post" class="form">
+            {% csrf_token %}
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    S'enregistrer
+                </div>
+                <div class="panel-body">
+                    <div class="input-group">
+                        <span class="input-group-addon glyphicon glyphicon-user" id="basic-addon1"></span>
+                        <input type="text" class="form-control" name="username" placeholder="Nom d'utilisateur" aria-describedby="basic-addon1">
+                    </div>
+                    <hr>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="firstname-addon"></span>
+                        <input type="text" class="form-control" name="firstname" placeholder="Prénom" aria-describedby="firstname-addon">
+                    </div>
+                    <hr>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="secondname-addon"></span>
+                        <input type="text" class="form-control" name="lastname" placeholder="Nom de famille" aria-describedby="secondname-addon">
+                    </div>
+                    <hr>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="email-addon">@</span>
+                        <input type="text" class="form-control" name="email" placeholder="Adresse mail" aria-describedby="email-addon">
+                    </div>
+                    <hr>
+                    <div class="input-group">
+                        <span class="input-group-addon glyphicon glyphicon-menu-right" id="password-addon"></span>
+                        <input type="password" class="form-control" name="password" placeholder="Mot de passe" aria-describedby="password-addon">
+                    </div>
+                    <hr>
+                    <div class="input-group">
+                        <span class="input-group-addon glyphicon glyphicon-menu-right" id="confirm-addon"></span>
+                        <input type="password" class="form-control" name="password_confirm" placeholder="Confirmez le mot de passe" aria-describedby="confirm-addon">
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-ok-sign"></span>
+                        Envoyer
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    {% endif %}
 </div>
 
 {% endblock %}
