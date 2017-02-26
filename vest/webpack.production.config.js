@@ -9,9 +9,12 @@ module.exports = {
     weather_graph: [
       './assets/js/weather_graph/index',
     ],
-    // location_map: [
-    //   './assets/js/location_map/index',
-    // ]
+    location_map: [
+      './assets/js/location_map/index',
+    ],
+    set_preference: [
+      './assets/js/set_preference/index',
+    ],
   },
 
   output: {
