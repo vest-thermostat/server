@@ -19,7 +19,7 @@ module.exports = {
 
   output: {
     path: path.resolve('./assets/bundles/'),
-    filename: '[name]-[hash].js',
+    filename: '[name].js',
   },
 
   plugins: [
@@ -29,11 +29,6 @@ module.exports = {
     //   filename: "common.js",
     //   minChunks: 2,
     // }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: "common",
-      filename: "common.js",
-      minChunks: 2,
-    }),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
