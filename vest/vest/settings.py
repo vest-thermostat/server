@@ -66,13 +66,16 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     'rest_framework.authtoken',
     'rest_framework_swagger',
+    'jsonify',
     'channels',
     'sekizai',
     'bootstrap3',
+    'realtime',
     'world',
     'weather',
     'location',
     'users',
+    'home',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -119,8 +122,6 @@ WSGI_APPLICATION = 'vest.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'geodb',
         'USER': 'admin',
@@ -166,10 +167,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'vest', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
+    os.path.join(BASE_DIR, 'vest', 'static'),
 )
 
 LOGIN_REDIRECT_URL = '/'
@@ -191,6 +193,6 @@ CHANNEL_LAYERS = {
             "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
             "hosts": [("localhost", 6379)],
         },
-        "ROUTING": "weather.routing.channel_routing",
+        "ROUTING": "realtime.routing.channel_routing",
     },
 }
