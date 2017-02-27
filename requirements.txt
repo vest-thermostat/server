@@ -10,3 +10,4 @@ channels
 asgi_redis
 psycopg2
 gunicorn
+daphne
