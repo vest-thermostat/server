@@ -4,7 +4,7 @@ const Gauge = require("react-svg-gauge");
 
 export default class TemperatureGauge extends React.Component {
     static propTypes: {
-        data: React.PropTypes.object.isRequired,
+        current: React.PropTypes.integer.isRequired,
     }
 
     render () {

@@ -78,9 +78,11 @@ export default class Container extends React.Component {
                     <Center>
                         <TemperatureGauge style={flexStyle} data={this.state.weathers.length ? this.state.weathers[this.state.weathers.length - 1] : []}/>
                     </Center>
-                    <Controller/>
+                    <Controller current={this.state.weathers.length ? this.state.weathers[this.state.weathers.length - 1].current_temperature : []}/>/>
                 </Panel>
             </Grid>
         );
     }
 }
+
+
