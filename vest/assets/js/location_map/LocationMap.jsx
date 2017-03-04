@@ -35,7 +35,7 @@ export default class LocationMap extends React.Component {
     }
 
     componentDidMount () {
-        this.ws = new WebSocket('ws://' + location.host +  '/location');
+        this.ws = new WebSocket('ws://' + location.host +  '/ws/location/');
         this.ws.onmessage = e => {
             const json = JSON.parse(e.data) ;
             if (json.type && json.geometry) {

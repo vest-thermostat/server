@@ -16,6 +16,6 @@ location_routing = [
 ]
 
 channel_routing = [
-    include(weather_routing, path=r"^/weather"),
-    include(location_routing, path=r"^/location"),
+    include(weather_routing, path=r"^/ws/weather"),
+    include(location_routing, path=r"^/ws/location"),
 ]
