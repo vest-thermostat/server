@@ -14,7 +14,11 @@ class HomeDayScheduleSerializer(serializers.ModelSerializer):
     data = serializers.SerializerMethodField() # HeatRangeSerializer()
 
     def get_data(self, obj):
-        return HeatRangeSerializer(HeatRange.objects.all().filter(day=obj.id)).data
+        result = []
+        for hr in HeatRange.objects.all().filter(day=obj.id):
+            result.append(HeatRangeSerializer(hr).data)
+
+        return result
 
     class Meta:
         model = HomeDaySchedule
