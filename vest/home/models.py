@@ -1,23 +1,25 @@
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from datetime import time
 
 
 HEAT_TYPE = (
-    (0, 'Standard'),
-    (1, 'Hot'),
-    (2, 'Eco'),
-    (3, 'Night'),
+    ('Standard', 'Standard'),
+    ('Hot', 'Hot'),
+    ('Eco', 'Eco'),
+    ('Night', 'Night'),
 )
 
 
 DAYS_OF_WEEK = (
-    (0, 'Monday'),
-    (1, 'Tuesday'),
-    (2, 'Wednesday'),
-    (3, 'Thursday'),
-    (4, 'Friday'),
-    (5, 'Saturday'),
-    (6, 'Sunday'),
+    ('Monday', 'Monday'),
+    ('Tuesday', 'Tuesday'),
+    ('Wednesday', 'Wednesday'),
+    ('Thursday', 'Thursday'),
+    ('Friday', 'Friday'),
+    ('Saturday', 'Saturday'),
+    ('Sunday', 'Sunday'),
 )
 
 
@@ -27,7 +29,7 @@ class HeatRange(models.Model):
     start = models.TimeField(blank=False)
     finish = models.TimeField(blank=False)
 
-    def get_overlappings(start, finish):
+    def get_overlappings(self, start, finish):
         sameDayHeatRange = HeatRange.objects.filter(day=self.day)
 
         overlappingHeatRangeStart = sameDayHeatRange.filter(start__gte=self.start, start__lte=self.finish)
@@ -36,7 +38,7 @@ class HeatRange(models.Model):
         return set(overlappingHeatRangeStart) | set(overlappingHeatRangeEnd)
 
     def save(self, *args, **kwargs):
-        for x in self.get_overlapping(self.start, self.finish):
+        for x in self.get_overlappings(self.start, self.finish):
             x.delete()
 
         super(HeatRange, self).save(*args, **kwargs)
@@ -53,13 +55,16 @@ class HomeDaySchedule(models.Model):
         if sameOwnerDaySchedule:
             return
 
-        instance = super(HomeDaySchedule, self).save(i*args, **kwargs)
+        instance = super(HomeDaySchedule, self).save(*args, **kwargs)
 
-        # Generate defaults timerange
-        for day in DAYS_OF_WEEK:
-            HeatRange.save(day=instance, type="Night", start=time(hour=0), finish=time(hour=7))
-            HeatRange.save(day=instance, type="Standard", start=time(hour=7), finish=time(hour=23))
-            HeatRange.save(day=instance, type="Eco", start=time(hour=23), finish=time(hour=0))
+
+@receiver(post_save, sender=HomeDaySchedule)
+def populate_heat_range(sender, instance, **kwargs):
+    # Generate defaults timerange
+    for day in DAYS_OF_WEEK:
+        HeatRange(day=instance, type="Night", start=time(hour=0), finish=time(hour=7)).save()
+        HeatRange(day=instance, type="Standard", start=time(hour=7), finish=time(hour=23)).save()
+        HeatRange(day=instance, type="Eco", start=time(hour=23), finish=time(hour=0)).save()
 
 
 class HeatTypeDefinition(models.Model):
@@ -72,5 +77,5 @@ class HeatTypeDefinition(models.Model):
 
         if sameOwnerHeatType:
             return
-        else:
-            super(HeatTypeDefinition, self).save(i*args, **kwargs)
+
+        super(HeatTypeDefinition, self).save(*args, **kwargs)
