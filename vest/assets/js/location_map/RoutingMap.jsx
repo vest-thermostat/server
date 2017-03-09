@@ -1,48 +1,43 @@
 import React, { PropTypes } from 'react';
 import { MapLayer } from 'react-leaflet';
 import Leaflet from 'leaflet';
-// import Routing from 'leaflet-routing-machine';
 import 'leaflet-routing-machine';
 import './RoutingMap.scss';
 
 
 export default class RoutingMachine extends MapLayer {
-    componentWillMount () {
-        super.componentWillMount();
+    // static contextTypes: {
+    //     map: PropTypes.instanceOf(Leaflet.Map),
+    // }
 
-        const {map} = this.props;
-        // this.leafletElement = this.createLeafletElement();
-        // this.leafletElement = L.Routing.control({
-        //     position: 'topleft',
-        //     waypoints: this.props.locations.map(x => L.latLng(x)),
-        //     show: false,
-        // }).addTo(map);
-        // this.leafletElement.on('routesfound', (e) => {
-        // });
+    static propTypes: {
+        locations: PropTypes.array,
     }
 
-    createLeafletElement() {
-        const { map } = this.props;
-        this.leafletElement = L.Routing.control({
+    static defaultProps: {
+        locations: [],
+    }
+
+    componentWillMount () {
+        super.componentWillMount()
+    }
+
+
+    createLeafletElement (props) {
+        const { map } = props;
+        return Leaflet.Routing.control({
             position: 'topleft',
-            waypoints: [Leaflet.latLng([50.81438, 4.38223]),],//this.props.locations.map(x => Leaflet.latLng(x)),
+            waypoints: [
+                Leaflet.latLng([50.81438, 4.38223]),
+                Leaflet.latLng(57.6792, 11.949),
+            ],//this.props.locations.map(x => Leaflet.latLng(x)),
             show: false,
         }).addTo(map);
-        console.log(this.leafletElement);
-        return this.leafletElement;
     }
 
     render () {
         return null;
     }
-}
-
-RoutingMachine.propTypes = {
-    locations: PropTypes.array,
-};
-
-RoutingMachine.defaultProps = {
-    locations: [],
 }
 
 

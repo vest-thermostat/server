@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Map, Marker, Popup, TileLayer, GeoJSON } from 'react-leaflet';
-// import RoutingMachine from './RoutingMap.jsx';
+import RoutingMachine from './RoutingMap.jsx';
 import L from 'leaflet';
 
 import './LocationMap.scss';
@@ -62,7 +62,7 @@ export default class LocationMap extends React.Component {
     }
 
     createGeoJson () {
-        console.log(JSON.stringify(this.state.locations));
+        // console.log(JSON.stringify(this.state.locations));
         return {
             type:"FeatureCollection",
             features: this.state.locations,
@@ -78,7 +78,7 @@ export default class LocationMap extends React.Component {
                     url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
-                <GeoJSON data={this.createGeoJson()}/>
+                <RoutingMachine data={this.createGeoJson()}/>
             </Map>
         );
     }
