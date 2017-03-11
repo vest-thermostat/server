@@ -11,26 +11,53 @@ export default class RoutingMachine extends MapLayer {
     // }
 
     static propTypes: {
-        locations: PropTypes.array,
+        locations: PropTypes.array.isRequired,
     }
 
     static defaultProps: {
         locations: [],
     }
 
+
+    constructor (props) {
+        super(props);
+    
+        this.state = {
+            locations: props.locations,        
+        }
+    }
+
+    componentWillReceiveProps (nextProps) {
+        if (nextProps.locations) {
+            this.setState({ locations: nextProps.locations });
+        }
+    }
+
     componentWillMount () {
         super.componentWillMount()
     }
 
+    createLatLng () {
+        return this.props.locations.map(x => {
+            const coord = x.geometry.coordinates;
+            return Leaflet.latLng(coord[1], coord[0]);
+        });
+    }
 
     createLeafletElement (props) {
         const { map } = props;
         return Leaflet.Routing.control({
             position: 'topleft',
-            waypoints: [
-                Leaflet.latLng([50.81438, 4.38223]),
-                Leaflet.latLng(57.6792, 11.949),
-            ],//this.props.locations.map(x => Leaflet.latLng(x)),
+            waypoints: this.createLatLng(),
+            show: false,
+        }).addTo(map);
+    }
+
+    updateLeafletElement (fromProps, toProps) {
+        const { map } = toProps;
+        return Leaflet.Routing.control({
+            position: 'topleft',
+            waypoints: this.createLatLng(),
             show: false,
         }).addTo(map);
     }
@@ -39,5 +66,3 @@ export default class RoutingMachine extends MapLayer {
         return null;
     }
 }
-
-
