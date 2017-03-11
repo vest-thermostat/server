@@ -39,6 +39,21 @@
         })
     </script>
     {% render_bundle 'location_map' %}
+
+    <hr>
+
+    <div class="panel panel-default" id="accordion">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Donnée brute
+            </a>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                {{ results | jsonify }}
+            </div>
+        </div>
+    </div>
 <div>
 
 {% endblock %}
