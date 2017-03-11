@@ -28,6 +28,12 @@ export default class Container extends React.Component {
         this.raiseTemperature = this.raiseTemperature.bind(this);
     }
 
+    componentWillReceiveProps (nextProps) {
+        if (nextProps.current) {
+            this.setState({ current: nextProps.current });
+        }
+    }
+
     toggleCustom (e) {
         const result = !this.state.custom;
         this.setState({ custom: result });

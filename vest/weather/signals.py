@@ -11,11 +11,12 @@ def send_notification(notification, owner):
     Group("weather-%s" % (owner)).send({'text': json.dumps(notification)})
 
 @receiver(post_save, sender=PrivateWeather)
-# def area_of_interest_post_save(sender, **kwargs):
 def new_weather_notification(sender, instance, created, **kwargs):
     if created:
         send_notification({
+            # 'type': '',
             'created': instance.created.isoformat(),
             'temperature': instance.temperature,
             'humidity': instance.humidity,
+            'current_temperature': instance.current_temperature,
         }, instance.owner)

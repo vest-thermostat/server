@@ -19,6 +19,7 @@
                         created: Date.parse("{{ data.created }}"),
                         temperature: {{ data.temperature }},
                         humidity: {{ data.humidity }},
+                        current_temperature: {{ data.current_temperature }},
                     },
                 {% endfor %}
             ]);
