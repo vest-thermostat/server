@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from django.core.urlresolvers import reverse
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
@@ -8,15 +11,24 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 from home.models import HeatTypeDefinition, HomeDaySchedule, HEAT_TYPE, DAYS_OF_WEEK
+from location import models as l
+
 
 class VestUser(AbstractUser):
     """
     """
     home = models.PointField(null=True)
 
+    def get_last_journey(self):
+        result = None
+        try:
+            result = l.UserJourney.objects.filter(owner=self).latest('created')
+        except:
+            logger.warning("Still no journey for " + self.username)
+        return result
+
     def get_absolute_url(self):
         return reverse('profile')
-
 
 @receiver(post_save, sender=VestUser)
 def create_default_preference(sender, instance, **kwargs):
