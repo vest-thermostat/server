@@ -33,7 +33,7 @@ class UserNest(models.Model):
         # Find close Nest for the same owner
 
         if (x):
-            logger.info("Nest already exist for user " + self.owner)
+            logger.info("Nest already exist for user " + self.owner.username)
             return None
 
         return super(UserNest, self).save(*args, **kwargs)

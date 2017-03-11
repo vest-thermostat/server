@@ -40,13 +40,16 @@ def detect_nest(datas):
 def verify_journey(sender, instance, created, **kwargs):
     lastJourney = instance.owner.get_last_journey()
     dataset = None
+    first = None
     if lastJourney:
         dataset = UserLocation.objects.filter(
             owner=instance.owner,
             created__gte=lastJourney.finish.created
         )
+        first = lastJourney.finish
     else:
         dataset = UserLocation.objects.filter(owner=instance.owner)
+        first = dataset[0]
 
     x = list(map(lambda x: x.position[0], dataset))
     y = list(map(lambda x: x.position[1], dataset))
@@ -60,14 +63,4 @@ def verify_journey(sender, instance, created, **kwargs):
         latitude = sum(X[y_db == 0, 1]) / float(len(X[y_db == 0, 1]))
         logger.info("New nest detected !")
         UserNest(owner=instance.owner, position=Point(longitude, latitude)).save()
-        UserJourney(owner=instance.owner, start=dataset[0], finish=instance).save()
-
-# @receiver(post_save, sender=UserLocation)
-# def handle_new_location(sender, instance, **kwargs):
-#     home = instance.owner.home
-#     if home is null:
-#         return
-
-#     distance = Distance(instance.location, home)
-#     if (distance.km < 10):
-#         print("ON")
+        UserJourney(owner=instance.owner, start=first, finish=instance).save()
