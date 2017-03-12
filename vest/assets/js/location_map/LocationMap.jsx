@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import { OrderedSet } from 'immutable';
+import { NotificationStack } from 'react-notification';
 import { Map, Marker, Popup, TileLayer, GeoJSON } from 'react-leaflet';
 import L from 'leaflet';
 import cookie from 'react-cookie';
@@ -15,6 +17,9 @@ export default class LocationMap extends React.Component {
 
         this.state = {
             current: c,
+            notifications: OrderedSet(),
+            count: 0,
+            nests: [],
             locations: props.locations.features,
         };
 
@@ -31,10 +36,32 @@ export default class LocationMap extends React.Component {
                     newLocations.splice(0, 1);
                 }
                 this.setState({ locations: newLocations });
-             }
+            } else if (json.type == 'notification' && json.message) {
+                const { notifictions, count } = this.state;
+                const newCount = count + 1;
+                return this.setState({
+                    count: newCount,
+                    notifications: notifications.add({
+                        message: json.message,
+                        key: newCount,
+                        action: 'Dismiss',
+                        dismissAfter: 3400,
+                        onClick: () => this.removeNotification(newCount),
+                    })
+                }); 
+            } else if (json.type == 'nest') {
+            
+            }
          };
          this.ws.onerror = e => this.setState({ error: ['WebSocket error'] })
          this.ws.onclose = e => !e.wasClean && this.setState({ error: [`WebSocket error: ${e.code} ${e.reason}`] })
+    }
+
+    removeNotification (count) {
+        const { notifications } = this.state;
+        this.setState({
+            notifications: notifications.filter(n => n.key !== count)
+        })
     }
 
     addLocation (e) {
@@ -77,13 +104,21 @@ export default class LocationMap extends React.Component {
 
     render () {
         return (
-            <Map center={this.state.current} zoom={13} onClick={this.addLocation} ref='map'>
-                <TileLayer
-                    url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            <div>
+                <Map center={this.state.current} zoom={13} onClick={this.addLocation} ref='map'>
+                    <TileLayer
+                        url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    />
+                    <RoutingMachine locations={this.state.locations}/>
+                </Map>
+                <NotificationStack
+                    notifications={this.state.notifications.toArray()}
+                    onDismiss={notification => this.setState({
+                        notifications: this.state.notifications.delete(notification)
+                    })}
                 />
-                <RoutingMachine locations={this.state.locations}/>
-            </Map>
+            </div>
         );
     }
 }

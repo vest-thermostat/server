@@ -13,10 +13,4 @@ def send_notification(notification, owner):
 @receiver(post_save, sender=PrivateWeather)
 def new_weather_notification(sender, instance, created, **kwargs):
     if created:
-        send_notification({
-            # 'type': '',
-            'created': instance.created.isoformat(),
-            'temperature': instance.temperature,
-            'humidity': instance.humidity,
-            'current_temperature': instance.current_temperature,
-        }, instance.owner)
+        send_notification(PrivateWeather(instance).data, instance.owner)
