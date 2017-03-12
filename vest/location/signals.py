@@ -41,12 +41,14 @@ def verify_journey(sender, instance, created, **kwargs):
     lastJourney = instance.owner.get_last_journey()
     dataset = None
     first = None
+    departure = None
     if lastJourney:
         dataset = UserLocation.objects.filter(
             owner=instance.owner,
             created__gte=lastJourney.finish.created
         )
         first = lastJourney.finish
+        departure = lastJourney.destination
     else:
         dataset = UserLocation.objects.filter(owner=instance.owner)
         first = dataset[0]
@@ -62,5 +64,22 @@ def verify_journey(sender, instance, created, **kwargs):
         longitude = sum(X[y_db == 0, 0]) / float(len(X[y_db == 0, 0]))
         latitude = sum(X[y_db == 0, 1]) / float(len(X[y_db == 0, 1]))
         logger.info("New nest detected !")
-        UserNest(owner=instance.owner, position=Point(longitude, latitude)).save()
-        UserJourney(owner=instance.owner, start=first, finish=instance).save()
+        nest = UserNest(
+            owner=instance.owner,
+            position=Point(longitude, latitude)
+        ).save()
+
+        if departure is None:
+            departure = UserNest(owner=first.owner, position=first.position).save()
+
+        UserJourney(
+            owner=instance.owner,
+            start=first,
+            finish=instance,
+            departure=departure,
+            destination=nest,
+        ).save()
+
+
+# @receiver(post_save, sender=UserNest)
+

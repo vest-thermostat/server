@@ -34,7 +34,7 @@ class UserNest(models.Model):
 
         if (x):
             logger.info("Nest already exist for user " + self.owner.username)
-            return None
+            return x[0]
 
         return super(UserNest, self).save(*args, **kwargs)
 
@@ -48,6 +48,8 @@ class UserJourney(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     start = models.ForeignKey('location.UserLocation', related_name="start_location", on_delete=models.CASCADE)
     finish = models.ForeignKey('location.UserLocation', related_name="finish_location", on_delete=models.CASCADE)
+    departure = models.ForeignKey('location.UserNest', related_name="start_nest", on_delete=models.CASCADE)
+    destination = models.ForeignKey('location.UserNest', related_name="finish_nest", on_delete=models.CASCADE)
 
     def get_set(self):
         return UserLocation.objects.filter(
