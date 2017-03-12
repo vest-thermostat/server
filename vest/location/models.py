@@ -16,6 +16,7 @@ class UserLocation(models.Model):
     position = models.PointField()
 
     class Meta:
+        ordering = ("-created",)
         get_latest_by = "created"
 
 class UserNest(models.Model):

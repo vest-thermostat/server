@@ -31,9 +31,11 @@ export default class LocationMap extends React.Component {
         this.ws.onmessage = e => {
             const json = JSON.parse(e.data) ;
             if (json.type && json.geometry) {
-                let newLocations = this.state.locations.concat([json]);
+                let newLocations = this.state.locations
+                newLocations.splice(0, 0, json);
+                
                 if (newLocations.length > 100) {
-                    newLocations.splice(0, 1);
+                    newLocations.splice(newLocations.length - 1, 1);
                 }
                 this.setState({ locations: newLocations });
             } else if (json.type == 'notification' && json.message) {
@@ -66,6 +68,9 @@ export default class LocationMap extends React.Component {
 
     addLocation (e) {
         const pos = e.latlng;
+        if (!pos) {
+            return;
+        }
         axios.post('/location/', {
             position: {
                 type: "Point",

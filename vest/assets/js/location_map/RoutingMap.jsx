@@ -48,7 +48,7 @@ export default class RoutingMachine extends MapLayer {
         const { map } = props;
         this.router = Leaflet.Routing.control({
             position: null,
-            waypoints: this.createLatLng(),
+            waypoints: this.createLatLng().reverse(),
             showAlternatives: false,
             show: false,
         }).addTo(map);
@@ -60,7 +60,7 @@ export default class RoutingMachine extends MapLayer {
         const { map } = toProps;
         return Leaflet.Routing.control({
             position: null,
-            waypoints: this.createLatLng(),
+            waypoints: this.createLatLng().reverse(),
             showAlternatives: false,
             show: false,
         }).addTo(map)
