@@ -1,6 +1,6 @@
 import json
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('location.signals')
 import numpy as np
 from sklearn.cluster import DBSCAN
 
@@ -21,6 +21,23 @@ def new_location_notification(sender, instance, created, **kwargs):
         s = LocationSerializer(instance)
         send_notification(s.data, instance.owner)
 
+def notificate(message, owner):
+    send_notification({
+        'type': 'notifications',
+        'message': message,
+    }, owner)
+
+@receiver(post_save, sender=UserNest)
+def notificate_nest(sender, instance, created, **kwargs):
+    if created:
+        logger.info('notificating new nest')
+        notificate("New nest saved.", instance.owner)
+
+@receiver(post_save, sender=UserJourney)
+def notificate_journey(sender, instance, created, **kwargs):
+    if created:
+        logger.info('notificating new journey')
+        notificate("New journey saved.", instance.owner)
 
 def detect_nest(datas):
     """
@@ -79,7 +96,3 @@ def verify_journey(sender, instance, created, **kwargs):
             departure=departure,
             destination=nest,
         ).save()
-
-
-# @receiver(post_save, sender=UserNest)
-
