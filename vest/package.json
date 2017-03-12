@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "immutable": "^4.0.0-rc.1",
     "install": "^0.8.7",
     "leaflet": "^1.0.3",
     "leaflet-routing-machine": "^3.2.5",
@@ -40,6 +41,7 @@
     "react-cookie": "^1.0.4",
     "react-dom": "^15.4.1",
     "react-leaflet": "^1.1.0",
+    "react-notification": "^6.6.0",
     "react-svg-gauge": "^1.0.4",
     "react-timeseries-charts": "^0.11.1"
   }
