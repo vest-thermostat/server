@@ -46,20 +46,24 @@ export default class RoutingMachine extends MapLayer {
 
     createLeafletElement (props) {
         const { map } = props;
-        return Leaflet.Routing.control({
-            position: 'topleft',
+        this.router = Leaflet.Routing.control({
+            position: null,
             waypoints: this.createLatLng(),
+            showAlternatives: false,
             show: false,
         }).addTo(map);
+
+        return this.router;
     }
 
     updateLeafletElement (fromProps, toProps) {
         const { map } = toProps;
         return Leaflet.Routing.control({
-            position: 'topleft',
+            position: null,
             waypoints: this.createLatLng(),
+            showAlternatives: false,
             show: false,
-        }).addTo(map);
+        }).addTo(map)
     }
 
     render () {
