@@ -19,7 +19,7 @@ from rest_framework import routers
 from rest_framework.authtoken import views
 from rest_framework_swagger.views import get_swagger_view
 
-from weather.views import WeatherList, PrivateWeatherList, PersonalTemperatureList
+from weather.views import WeatherList, PrivateWeatherList, PersonalTemperatureList, TemperatureView
 from location.views import LocationList, JourneyList, NestList
 from home.views import HomeView
 # from users.views import UserProfileView
@@ -35,9 +35,10 @@ router.register(r'home', HomeView, base_name='home')
 # router.register(r'users', UserProfileView, base_name='users')
 
 urlpatterns = [
-    url(r'^api-auth/', views.obtain_auth_token),
-    url(r'^admin/', admin.site.urls),
-    url(r'users/', include('users.urls')),
-    url(r'docs/', get_swagger_view(title='VEST API')),
+    url(r'^api-auth/$', views.obtain_auth_token),
+    url(r'^admin/$', admin.site.urls),
+    url(r'users/$', include('users.urls')),
+    url(r'weather/$', TemperatureView.as_view({'get': 'list'})),
+    url(r'docs/$', get_swagger_view(title='VEST API')),
     url(r'^', include(router.urls)),
 ]
