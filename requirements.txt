@@ -12,6 +12,7 @@ channels
 numpy
 matplotlib
 sklearn
+scipy
 
 asgi_redis
 psycopg2
