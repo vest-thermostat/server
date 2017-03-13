@@ -55,6 +55,10 @@ module.exports = {
       }, {
         test: [/\.scss$/, /\.css$/],
         loaders: ['style-loader', 'css-loader', 'sass-loader']
+      }, {
+        test: /\.png$/,
+        loader: "url-loader",
+        query: { mimetype: "image/png" }
       },
     ],
   },
