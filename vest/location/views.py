@@ -1,10 +1,11 @@
 from rest_framework import viewsets
+from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework.exceptions import ValidationError
 from rest_framework.renderers import TemplateHTMLRenderer
 
-from location.models import UserLocation, UserJourney
-from location.serializers import LocationSerializer, JourneySerializer
+from location.models import UserLocation, UserJourney, UserNest
+from location.serializers import LocationSerializer, JourneySerializer, NestSerializer
 from users.permissions import IsOwner
 
 class LocationList(viewsets.ModelViewSet):
@@ -25,6 +26,27 @@ class LocationList(viewsets.ModelViewSet):
             raise ValidationError()
 
         serializer.save(owner=self.request.user)
+
+
+class NestList(mixins.ListModelMixin,
+        mixins.RetrieveModelMixin,
+        viewsets.GenericViewSet):
+    queryset = UserNest.objects.all()
+    serializer_class = NestSerializer
+    permission_classes = (
+            permissions.IsAuthenticated,
+            IsOwner,
+    )
+
+    def get_queryset(self):
+        return UserNest.objects.filter(owner=self.request.user)
+
+    def perform_create(self, serializer):
+        if not serializer.is_valid():
+            raise ValidationError()
+
+        serializer.save(owner=self.request.user)
+
 
 class JourneyList(viewsets.ModelViewSet):
     queryset = UserJourney.objects.all()
