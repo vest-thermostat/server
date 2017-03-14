@@ -13,4 +13,5 @@ def send_notification(notification, owner):
 @receiver(post_save, sender=PrivateWeather)
 def new_weather_notification(sender, instance, created, **kwargs):
     if created:
-        send_notification(PrivateWeatherSerializer(instance).data, instance.owner)
+        tmp = PrivateWeatherSerializer(instance)
+        send_notification(tmp.data, instance.owner)
