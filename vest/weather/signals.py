@@ -4,7 +4,7 @@ from django.dispatch import receiver
 
 from channels import Group
 from .models import PrivateWeather
-# from .serializers import PrivateWeatherSerializer
+from .serializers import PrivateWeatherSerializer
 
 def send_notification(notification, owner):
     # logger.info('send_notification. notification = %s', notification)
@@ -13,4 +13,4 @@ def send_notification(notification, owner):
 @receiver(post_save, sender=PrivateWeather)
 def new_weather_notification(sender, instance, created, **kwargs):
     if created:
-        send_notification(PrivateWeather(instance).data, instance.owner)
+        send_notification(PrivateWeatherSerializer(instance).data, instance.owner)
