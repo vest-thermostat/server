@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from weather.models import Weather, PrivateWeather, PersonalTemperature
+from home.models import ThermostatState
 
 class PersonalTemperatureSerializer(serializers.ModelSerializer):
     """
@@ -31,6 +32,7 @@ class PrivateWeatherSerializer(serializers.ModelSerializer):
     """
     """
     current_temperature = serializers.SerializerMethodField()
+    thermostat_state = serializers.SerializerMethodField()
 
     def get_current_temperature(self, obj):
         tmp = PersonalTemperature.objects.all().filter(owner=obj.owner).latest()
@@ -38,6 +40,13 @@ class PrivateWeatherSerializer(serializers.ModelSerializer):
             return tmp.temperature
         else:
             return 20.0
+
+    def get_thermostat_state (self, obj):
+        tmp = PersonalTemperature.objects.all().filter(owner=obj.owner).latest()
+        if tmp:
+            return tmp.state
+
+        return False
 
     class Meta:
         model = PrivateWeather
@@ -47,5 +56,6 @@ class PrivateWeatherSerializer(serializers.ModelSerializer):
             "humidity",
             "owner",
             "current_temperature",
+            "thermostat_state",
         )
         read_only_fields = ("owner",)

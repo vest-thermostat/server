@@ -22,6 +22,20 @@ DAYS_OF_WEEK = (
     ('Sunday', 'Sunday'),
 )
 
+THERMOSTAT_STATE = (
+    ('On', 'On'),
+    ('Off', 'Off'),
+)
+
+class ThermostatState(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey('users.VestUser', on_delete=models.CASCADE)
+    state = models.CharField(blank=False, choices=THERMOSTAT_STATE, max_length=10)
+
+    class Meta:
+        ordering = ("-created",)
+        get_latest_by = "created"
+
 
 class HeatRange(models.Model):
     day = models.ForeignKey('home.HomeDaySchedule', on_delete=models.CASCADE)
