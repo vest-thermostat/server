@@ -1,5 +1,5 @@
 from django.contrib.gis import admin
-from .models import HeatTypeDefinition, HomeDaySchedule, HeatRange
+from .models import HeatTypeDefinition, HomeDaySchedule, HeatRange, ThermostatState
 
 @admin.register(HeatTypeDefinition)
 class HeatTypeDefinitionAdmin(admin.ModelAdmin):
@@ -12,3 +12,7 @@ class HomeDayScheduleAdmin(admin.ModelAdmin):
 @admin.register(HeatRange)
 class HeatRangeAdmin(admin.ModelAdmin):
     list_display = ['day', 'type', 'start', 'finish']
+
+@admin.register(ThermostatState)
+class StateAdmin(admin.ModelAdmin):
+    list_display = ['created', 'state', 'owner']
