@@ -27,6 +27,9 @@ class UserNest(models.Model):
     # def find(owner, point):
     #     nest = UserNest.objects.filter(owner=owner)
 
+    def is_home(self):
+        return self.owner.home and (self.owner.home.distance(self.position) <= 0.03)
+
     def save(self, *args, **kwargs):
         x = UserNest.objects.filter(owner=self.owner, position__distance_lte=(self.position, D(m=30)))
         # Find close Nest for the same owner
@@ -67,3 +70,4 @@ class UserJourney(models.Model):
         get_latest_by = "created"
 
 from location import signals
+from location import learn
