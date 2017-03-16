@@ -36,8 +36,8 @@ router.register(r'home', HomeView, base_name='home')
 
 urlpatterns = [
     url(r'^api-auth/$', views.obtain_auth_token),
-    url(r'^admin/$', admin.site.urls),
-    url(r'users/$', include('users.urls')),
+    url(r'^admin/', admin.site.urls),
+    url(r'users/', include('users.urls')),
     url(r'weather/$', TemperatureView.as_view({'get': 'list'})),
     url(r'docs/$', get_swagger_view(title='VEST API')),
     url(r'^', include(router.urls)),
