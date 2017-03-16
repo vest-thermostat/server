@@ -42,9 +42,9 @@ class PrivateWeatherSerializer(serializers.ModelSerializer):
             return 20.0
 
     def get_thermostat_state (self, obj):
-        tmp = PersonalTemperature.objects.all().filter(owner=obj.owner).latest()
+        tmp = ThermostatState.objects.all().filter(owner=obj.owner).latest()
         if tmp:
-            return tmp.state
+            return tmp.state == "On"
 
         return False
 
