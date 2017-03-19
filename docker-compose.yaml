@@ -14,7 +14,8 @@ services:
   web:
     build: .
     container_name: django
-    command: bash -c "sleep 10 && npm install && npm run build && python3 manage.py collectstatic --noinput && python3 manage.py makemigrations && python3 manage.py migrate && daphne vest.asgi:channel_layer -b 0.0.0.0 -p 80"
+    # command: bash -c "sleep 10 && npm install && npm run build && python3 manage.py collectstatic --noinput && python3 manage.py makemigrations && python3 manage.py migrate && supervisord"
+    command: bash -c "sleep 10 && python3 manage.py collectstatic --noinput && python3 manage.py makemigrations && python3 manage.py migrate && supervisord"
     depends_on:
       - db
     links:
