@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { MapLayer } from 'react-leaflet';
 import Leaflet from 'leaflet';
 import 'leaflet-routing-machine';
+import 'lrm-graphhopper';
 import './RoutingMap.scss';
 
 
@@ -38,7 +39,11 @@ export default class RoutingMachine extends MapLayer {
     }
 
     createLatLng () {
-        return this.props.locations.map(x => {
+        let d = this.props.locations;
+        if (d.length > 50) {
+            d = d.slice(0, 50);
+        }
+        return d.map(x => {
             const coord = x.geometry.coordinates;
             return Leaflet.latLng(coord[1], coord[0]);
         });
@@ -47,6 +52,7 @@ export default class RoutingMachine extends MapLayer {
     createLeafletElement (props) {
         const { map } = props;
         this.router = Leaflet.Routing.control({
+            router: new Leaflet.Routing.graphHopper(''),
             position: null,
             waypoints: this.createLatLng().reverse(),
             showAlternatives: false,
@@ -59,6 +65,7 @@ export default class RoutingMachine extends MapLayer {
     updateLeafletElement (fromProps, toProps) {
         const { map } = toProps;
         return Leaflet.Routing.control({
+            router: new L.Routing.graphHopper(''),
             position: null,
             waypoints: this.createLatLng().reverse(),
             showAlternatives: false,
