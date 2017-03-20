@@ -32,6 +32,7 @@
     "install": "^0.8.7",
     "leaflet": "^1.0.3",
     "leaflet-routing-machine": "^3.2.5",
+    "lrm-graphhopper": "^1.1.3",
     "moment": "^2.17.1",
     "pondjs": "^0.7.2",
     "rc-slider": "^6.1.2",
