@@ -8,7 +8,7 @@ from location.models import UserLocation, UserJourney, UserNest
 from location.serializers import LocationSerializer, JourneySerializer, NestSerializer
 from users.permissions import IsOwner
 
-class LocationList(viewsets.ModelViewSet):
+class LocationInterface(viewsets.ModelViewSet):
     queryset = UserLocation.objects.all()
     serializer_class = LocationSerializer
     permission_classes = (
@@ -17,6 +17,24 @@ class LocationList(viewsets.ModelViewSet):
     )
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'location.html'
+
+    def get_queryset(self):
+        return UserLocation.objects.filter(owner=self.request.user)
+
+    def perform_create(self, serializer):
+        if not serializer.is_valid():
+            raise ValidationError()
+
+        serializer.save(owner=self.request.user)
+
+
+class LocationList(viewsets.ModelViewSet):
+    queryset = UserLocation.objects.all()
+    serializer_class = LocationSerializer
+    permission_classes = (
+            permissions.IsAuthenticated,
+            IsOwner,
+    )
 
     def get_queryset(self):
         return UserLocation.objects.filter(owner=self.request.user)

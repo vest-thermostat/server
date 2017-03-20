@@ -20,7 +20,7 @@ from rest_framework.authtoken import views
 from rest_framework_swagger.views import get_swagger_view
 
 from weather.views import WeatherList, PrivateWeatherList, PersonalTemperatureList, TemperatureView
-from location.views import LocationList, JourneyList, NestList
+from location.views import LocationList, JourneyList, NestList, LocationInterface
 from home.views import HomeView
 # from users.views import UserProfileView
 
@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'users/', include('users.urls')),
     url(r'weather/$', TemperatureView.as_view({'get': 'list'})),
+    url(r'location/interface$', LocationInterface.as_view({'get': 'list'})),
     url(r'docs/$', get_swagger_view(title='VEST API')),
     url(r'^', include(router.urls)),
 ]
