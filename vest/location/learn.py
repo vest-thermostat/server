@@ -59,12 +59,21 @@ def analyze_route(locations, journeys):
         else:
             match[d] = 1
 
+    owner = locations[0].owner
+
+    last = ThermostatState.objects.filter(owner=owner).latest()
+
     for destination, value in match.items():
         print(destination.is_home(), destination.position.coords, value / len(locations))
-        if destination.is_home() and (value / len(locations)) > 0.50:
-            return ThermostatState(owner=destination.owner, state="On").save()
 
-    ThermostatState(owner=destination.owner, state="Off").save()
+
+        if destination.is_home() and (value / len(locations)) > 0.50:
+            if last and not last.state:
+                ThermostatState(owner=owner, state="On").save()
+            return
+
+    if last and last.state:
+        ThermostatState(owner=owner, state="Off").save()
 
 @receiver(post_save, sender=UserLocation)
 def verify_journey(sender, instance, created, **kwargs):
@@ -114,5 +123,5 @@ def verify_journey(sender, instance, created, **kwargs):
         if len(journeySet) == 0:
             journeySet = UserJourney.objects.filter(owner=first.owner)
 
-        if len(journeySet):
+        if len(dataset) and len(journeySet):
             analyze_route(dataset, journeySet)
