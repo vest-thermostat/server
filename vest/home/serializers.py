@@ -1,5 +1,18 @@
 from rest_framework import serializers
-from .models import HeatTypeDefinition, HomeDaySchedule, HeatRange
+from .models import HeatTypeDefinition, HomeDaySchedule, HeatRange, ThermostatState
+
+class StateSerializer(serializers.ModelSerializer):
+    state = serializers.SerializerMethodField()
+
+    def get_state(self, obj):
+        return obj == "On"
+
+    class Meta:
+        model = ThermostatState
+        fields = (
+            'created',
+            'state',
+        )
 
 class HeatRangeSerializer(serializers.ModelSerializer):
     class Meta:

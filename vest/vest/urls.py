@@ -21,8 +21,7 @@ from rest_framework_swagger.views import get_swagger_view
 
 from weather.views import WeatherList, PrivateWeatherList, PersonalTemperatureList, TemperatureView
 from location.views import LocationList, JourneyList, NestList, LocationInterface
-from home.views import HomeView
-# from users.views import UserProfileView
+from home.views import HomeView, StateView
 
 router = routers.DefaultRouter()
 router.register(r'weather/own', PrivateWeatherList, base_name='weather_own')
@@ -31,7 +30,7 @@ router.register(r'weather/set', PersonalTemperatureList, base_name='weather_set'
 router.register(r'location/journey', JourneyList, base_name='journey')
 router.register(r'location/nest', NestList, base_name='nest')
 router.register(r'location', LocationList, base_name='location')
-router.register(r'home', HomeView, base_name='home')
+router.register(r'home/state', StateView, base_name='state')
 # router.register(r'users', UserProfileView, base_name='users')
 
 urlpatterns = [
