@@ -113,4 +113,6 @@ def verify_journey(sender, instance, created, **kwargs):
         journeySet = UserJourney.objects.filter(departure=departure)
         if len(journeySet) == 0:
             journeySet = UserJourney.objects.filter(owner=first.owner)
-        analyze_route(dataset, journeySet)
+
+        if len(journeySet):
+            analyze_route(dataset, journeySet)
