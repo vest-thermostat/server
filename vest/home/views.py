@@ -12,6 +12,13 @@ class StateView(viewsets.ModelViewSet):
     def get_queryset(self):
         return ThermostatState.objects.filter(owner=self.request.user)
 
+    def perform_create(self, serializer):
+        if not serializer.is_valid():
+            raise ValidationError()
+
+        serializer.save(owner=self.request.user)
+
+
 class HomeView(viewsets.ModelViewSet):
     """
     """
@@ -25,3 +32,9 @@ class HomeView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return HomeDaySchedule.objects.filter(owner=self.request.user)
+
+    def perform_create(self, serializer):
+        if not serializer.is_valid():
+            raise ValidationError()
+
+        serializer.save(owner=self.request.user)
