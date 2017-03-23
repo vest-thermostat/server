@@ -68,11 +68,11 @@ def analyze_route(locations, journeys):
 
 
         if destination.is_home() and (value / len(locations)) > 0.50:
-            if last and not last.state:
+            if last and (last.state != "On"):
                 ThermostatState(owner=owner, state="On").save()
             return
 
-    if last and last.state:
+    if last and (last.state == "On"):
         ThermostatState(owner=owner, state="Off").save()
 
 @receiver(post_save, sender=UserLocation)
